@@ -13,16 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class AuthService implements UserDetailsService {
-
     @Autowired
     UserService userService;
-
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.getByUsername(username).get();
         return AuthUser.build(user);
     }
-
-
 }

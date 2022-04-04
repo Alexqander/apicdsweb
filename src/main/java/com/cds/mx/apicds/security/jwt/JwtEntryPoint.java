@@ -17,8 +17,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        logger.error("Error en el metodo Comments");
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"No Autorizado");
+        logger.error("Error en el metodo comments");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No autorizado");
     }
-
 }

@@ -19,30 +19,31 @@ public class JwtProvider {
     private int expiration;
 
     public String generatedToken(Authentication authentication){
-        AuthUser authUser =(AuthUser) authentication.getPrincipal();
+        AuthUser authUser = (AuthUser) authentication.getPrincipal();
         return Jwts.builder().setSubject(authUser.getUsername()).setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+expiration*1000L))
-                .signWith(SignatureAlgorithm.HS512,secret).compact();
+                .setExpiration(new Date(new Date().getTime()+expiration * 1000L))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
-    public String getUsernameFromToken(String token){
+
+    public String getUsernameFromToken(String  token){
         return Jwts.parser().setSigningKey(secret)
                 .parseClaimsJws(token).getBody().getSubject();
     }
-    public boolean validateToken(String token){
-        try {
+
+    public boolean validarToken(String token){
+        try{
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-        }catch (MalformedJwtException e){
-            logger.error("Token mal formado" + e);
+        }catch(MalformedJwtException e){
+            logger.error("Token mal formado");
         }catch (UnsupportedJwtException e){
-            logger.error("Token no soportado" + e);
+            logger.error("Token no soportado");
         }catch (ExpiredJwtException e){
-            logger.error("Token Expirado" + e);
+            logger.error("Token expirado");
         }catch (IllegalArgumentException e){
-            logger.error("Token no provisto" + e);
+            logger.error("Token no provisto");
         }catch (SignatureException e){
-            logger.error("Token en la forma del token" + e);
+            logger.error("Error en la forma del token");
         }
         return false;
     }
-
 }
