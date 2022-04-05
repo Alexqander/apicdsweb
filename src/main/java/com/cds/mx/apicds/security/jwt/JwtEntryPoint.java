@@ -13,11 +13,12 @@ import java.io.IOException;
 
 @Component
 public class JwtEntryPoint implements AuthenticationEntryPoint {
-    public final static Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
+    private final static Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        logger.error("Error en el metodo comments");
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+                         AuthenticationException authException) throws IOException, ServletException {
+        logger.error("Error into commence method");
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No autorizado");
     }
 }

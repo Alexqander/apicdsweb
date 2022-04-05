@@ -17,33 +17,36 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter {
     private final static Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
-
     @Autowired
     JwtProvider provider;
     @Autowired
-    AuthService authService;
+    AuthService service;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try{
-           String token =getToken(request);
-           if (token != null && provider.validarToken(token)){
-               String username = provider.getUsernameFromToken(token);
-               UserDetails userDetails = authService.loadUserByUsername(username);
-               UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                       userDetails,null,userDetails.getAuthorities()
-               );
-               SecurityContextHolder.getContext().setAuthentication(auth);
-           }
-        }catch (Exception e){
-            logger.error("Error filtrado Token: "+e.getMessage());
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        try {
+            String token = getToken(request);
+            if (token != null && provider.validateToken(token)) {
+                String username = provider.getUsernameFromToken(token);
+                UserDetails userDetails = service.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        } catch (Exception e) {
+            logger.error("Error filtrando el token: " + e.getMessage());
         }
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
-    public String getToken(HttpServletRequest request){
+
+    public String getToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer"))
-            return header.replace("Bearer","");
+            return header.replace("Bearer ", "");
         return null;
     }
 }

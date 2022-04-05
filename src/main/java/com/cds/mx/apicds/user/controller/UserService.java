@@ -27,7 +27,8 @@ public class UserService {
             return new ResponseEntity<>(new Message("el Usuario ya existe",true,null), HttpStatus.BAD_REQUEST);
         if (userRepository.existsByPersonDni(user.getPerson().getDni()))
             return new ResponseEntity<>(new Message("La persona ya existe",true,null), HttpStatus.BAD_REQUEST);
-        Person person = personRepository.saveAndFlush(user.getPerson());
+        Person person =user.getPerson();
+               person = personRepository.saveAndFlush(person);
         user.setPerson(person);
         return new ResponseEntity<>(new Message("OK",false,userRepository.saveAndFlush(user)), HttpStatus.OK);
     }

@@ -1,4 +1,5 @@
 package com.cds.mx.apicds.security;
+
 import com.cds.mx.apicds.security.controller.AuthService;
 import com.cds.mx.apicds.security.jwt.JwtEntryPoint;
 import com.cds.mx.apicds.security.jwt.JwtTokenFilter;
@@ -22,45 +23,48 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MainSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
-    AuthService service;
+    AuthService authService;
     @Autowired
     JwtEntryPoint entryPoint;
 
     @Bean
-    public JwtTokenFilter jwtTokenFilter(){
+    public JwtTokenFilter jwtTokenFilter() {
         return new JwtTokenFilter();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(service).passwordEncoder(passwordEncoder());
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(authService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean()throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Override
-    public AuthenticationManager authenticationManager()throws Exception{
+    public AuthenticationManager authenticationManager() throws Exception{
         return super.authenticationManager();
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().disable().authorizeRequests()
+    public void configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/user/").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/user/").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/product/").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(entryPoint)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
+
 }

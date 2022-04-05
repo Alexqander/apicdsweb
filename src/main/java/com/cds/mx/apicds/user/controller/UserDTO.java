@@ -1,34 +1,46 @@
-package com.cds.mx.apicds.security.controller;
-
+package com.cds.mx.apicds.user.controller;
 
 import com.cds.mx.apicds.person.model.Person;
 import com.cds.mx.apicds.role.model.Role;
+import com.sun.istack.NotNull;
 
 import java.util.Set;
 
 public class UserDTO {
     private long id;
+    @NotNull
     private String username;
+    @NotNull
     private String password;
-    private Set<Role> roles;
+    @NotNull
     private Person person;
+    @NotNull
+    private Set<Role> roles;
 
     public UserDTO() {
     }
 
-    public UserDTO(String username, String password, Set<Role> roles, Person person) {
+    public UserDTO(String username, String password, Person person, Set<Role> roles) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
         this.person = person;
+        this.roles = roles;
     }
 
-    public UserDTO(long id, String username, String password, Set<Role> roles, Person person) {
+    public UserDTO(long id, String username, String password, Person person, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.roles = roles;
         this.person = person;
+        this.roles = roles;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public long getId() {
@@ -53,14 +65,6 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     public Person getPerson() {

@@ -1,53 +1,44 @@
 package com.cds.mx.apicds.user.model;
 
 import com.cds.mx.apicds.person.model.Person;
-import com.cds.mx.apicds.projects.model.Projects;
 import com.cds.mx.apicds.role.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
+
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, unique = true)
     private String username;
-    @Column(nullable = false )
     @JsonIgnore
     private String password;
-
     @OneToOne
     @JoinColumn(name = "person_id")
     private Person person;
-
     @ManyToMany(mappedBy = "users")
-    private Set<Role>roles;
+    private Set<Role> authorities;
 
     public User() {
     }
 
-    public User(long id, String username, String password, Person person, Set<Role> roles) {
+    public User(String username, String password, Person person, Set<Role> authorities) {
+        this.username = username;
+        this.password = password;
+        this.person = person;
+        this.authorities = authorities;
+    }
+
+    public User(long id, String username, String password, Person person, Set<Role> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.person = person;
-        this.roles = roles;
-    }
-
-    public User(String username, String password, Person person, Set<Role> roles) {
-        this.username = username;
-        this.password = password;
-        this.person = person;
-        this.roles = roles;
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+        this.authorities = authorities;
     }
 
     public long getId() {
@@ -82,11 +73,11 @@ public class User {
         this.person = person;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<Role> getAuthorities() {
+        return authorities;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
     }
 }

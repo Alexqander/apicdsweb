@@ -1,4 +1,5 @@
 package com.cds.mx.apicds.security.controller;
+
 import com.cds.mx.apicds.security.jwt.JwtProvider;
 import com.cds.mx.apicds.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,23 +28,21 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Message> login(@Valid @RequestBody LoginUserDTO loginUserDTO,
-                                         BindingResult result){
-        if (result.hasErrors()){
-            return new ResponseEntity<>(new Message("Ingrese datos correctos, baboso...",true,null),
+                                         BindingResult result) {
+        if (result.hasErrors())
+            return new ResponseEntity<>(new Message("Usuario y/o contraseña incorrectos", true, null),
                     HttpStatus.BAD_REQUEST);
-        }
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUserDTO.getUsername(), loginUserDTO.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(loginUserDTO.getUsername(), loginUserDTO.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = provider.generatedToken(authentication);
+        String token = provider.generateToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Map<String, Object> data = new HashMap<>();
-        data.put("token",token);
-        data.put("user",userDetails);
-        return new ResponseEntity<>(new Message("OK",false,data),HttpStatus.OK);
-
+        data.put("token", token);
+        data.put("user", userDetails);
+        return new ResponseEntity<>(new Message("ok", false, data), HttpStatus.OK);
     }
+
+
 }

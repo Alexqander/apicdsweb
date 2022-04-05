@@ -12,38 +12,41 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
-    public final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
+    private final static Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.expiration}")
     private int expiration;
 
-    public String generatedToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
         AuthUser authUser = (AuthUser) authentication.getPrincipal();
-        return Jwts.builder().setSubject(authUser.getUsername()).setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime()+expiration * 1000L))
+        return Jwts.builder().setSubject(authUser.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + expiration * 1000L))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public String getUsernameFromToken(String  token){
+    public String getUsernameFromToken(String token) {
         return Jwts.parser().setSigningKey(secret)
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validarToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-        }catch(MalformedJwtException e){
+            return true;
+        } catch (MalformedJwtException e) {
             logger.error("Token mal formado");
-        }catch (UnsupportedJwtException e){
+        } catch (UnsupportedJwtException e) {
             logger.error("Token no soportado");
-        }catch (ExpiredJwtException e){
-            logger.error("Token expirado");
-        }catch (IllegalArgumentException e){
+        } catch (ExpiredJwtException e) {
+            logger.error("El token ha expirado");
+        } catch (IllegalArgumentException e) {
             logger.error("Token no provisto");
-        }catch (SignatureException e){
-            logger.error("Error en la forma del token");
+        } catch (SignatureException e) {
+            logger.error("Error en la firma del token");
         }
         return false;
     }
+
 }

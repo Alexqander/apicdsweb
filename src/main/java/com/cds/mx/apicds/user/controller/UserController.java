@@ -1,6 +1,4 @@
 package com.cds.mx.apicds.user.controller;
-
-import com.cds.mx.apicds.security.controller.UserDTO;
 import com.cds.mx.apicds.user.model.User;
 import com.cds.mx.apicds.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
