@@ -27,13 +27,13 @@ public class PersonDTO {
     private User user;
     private Status status;
     private Admissions admission;
-    private List<Skills> personSkills;
-    private List<Projects>projects;
+    private Skills personSkills;
+    private Projects projects;
 
     public PersonDTO() {
     }
 
-    public PersonDTO(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, List<Skills> personSkills, List<Projects> projects) {
+    public PersonDTO(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, Skills personSkills, Projects projects) {
         this.name = name;
         this.lastname = lastname;
         this.motherslastname = motherslastname;
@@ -54,30 +54,7 @@ public class PersonDTO {
         this.projects = projects;
     }
 
-
-
-
-    public PersonDTO(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, User user, Status status, Admissions admission, List<Skills> personSkills, List<Projects> projects) {
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        CvFileUrl = cvFileUrl;
-        this.user = user;
-        this.status = status;
-        this.admission = admission;
-        this.personSkills = personSkills;
-        this.projects = projects;
-    }
-
-    public PersonDTO(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, List<Skills> personSkills, List<Projects> projects) {
+    public PersonDTO(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, Skills personSkills, Projects projects) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
@@ -97,6 +74,43 @@ public class PersonDTO {
         this.admission = admission;
         this.personSkills = personSkills;
         this.projects = projects;
+    }
+
+    public PersonDTO(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.motherslastname = motherslastname;
+        this.dni = dni;
+        this.email = email;
+        this.emailInstitutional = emailInstitutional;
+        this.cellphone = cellphone;
+        this.phone = phone;
+        this.address = address;
+        this.scholl = scholl;
+        this.postulation = postulation;
+        CvFileUrl = cvFileUrl;
+        ProfileImageUrl = profileImageUrl;
+        this.user = user;
+        this.status = status;
+    }
+
+    public PersonDTO(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status) {
+        this.name = name;
+        this.lastname = lastname;
+        this.motherslastname = motherslastname;
+        this.dni = dni;
+        this.email = email;
+        this.emailInstitutional = emailInstitutional;
+        this.cellphone = cellphone;
+        this.phone = phone;
+        this.address = address;
+        this.scholl = scholl;
+        this.postulation = postulation;
+        CvFileUrl = cvFileUrl;
+        ProfileImageUrl = profileImageUrl;
+        this.user = user;
+        this.status = status;
     }
 
     public long getId() {
@@ -196,19 +210,19 @@ public class PersonDTO {
     }
 
     public String getCvFileUrl() {
-        return CvFileUrl;
+        return this.CvFileUrl;
     }
 
     public void setCvFileUrl(String cvFileUrl) {
-        CvFileUrl = cvFileUrl;
+        this.CvFileUrl = cvFileUrl;
     }
 
     public String getProfileImageUrl() {
-        return ProfileImageUrl;
+        return this.ProfileImageUrl;
     }
 
     public void setProfileImageUrl(String profileImageUrl) {
-        ProfileImageUrl = profileImageUrl;
+        this.ProfileImageUrl = profileImageUrl;
     }
 
     public User getUser() {
@@ -235,19 +249,19 @@ public class PersonDTO {
         this.admission = admission;
     }
 
-    public List<Skills> getPersonSkills() {
+    public Skills getPersonSkills() {
         return personSkills;
     }
 
-    public void setPersonSkills(List<Skills> personSkills) {
+    public void setPersonSkills(Skills personSkills) {
         this.personSkills = personSkills;
     }
 
-    public List<Projects> getProjects() {
+    public Projects getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Projects> projects) {
+    public void setProjects(Projects projects) {
         this.projects = projects;
     }
 }

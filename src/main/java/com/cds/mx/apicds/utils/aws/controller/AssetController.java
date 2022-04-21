@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/cds/assets")
-
+@CrossOrigin(origins = {"*"})
 public class AssetController {
 
     @Autowired

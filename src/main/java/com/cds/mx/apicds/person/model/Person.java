@@ -8,13 +8,15 @@ import com.cds.mx.apicds.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "person_id")
+    @Column(name = "id_person")
     private long id;
     @Column
     private String name;
@@ -41,8 +43,6 @@ public class Person {
     private String postulation;
     @Column
     private String CvFileUrl;
-    @Column
-    private String ProfileImageUrl;
     @JsonIgnore
     @OneToOne(mappedBy = "person")
     private User user;
@@ -52,25 +52,52 @@ public class Person {
     private Status status;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "admissions_id")
     private Admissions admission;
 
-    @ManyToMany(mappedBy = "personSkills")
-    private List<Skills>personSkills;
 
-    @ManyToMany(mappedBy = "personsProjects")
-    private List<Projects>projects;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "person_skills",
+            joinColumns = { @JoinColumn(name = "id_person") },
+            inverseJoinColumns = { @JoinColumn(name = "id_skill") })
+    private Set<Skills> skills = new HashSet<>();
+    //skilss
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "person_projects",
+            joinColumns = { @JoinColumn(name = "id_person") },
+            inverseJoinColumns = { @JoinColumn(name = "id_project") })
+    private Set<Projects> projects = new HashSet<>();
+
+
+
+    //metodo para insertar el projecto a la union de muchos a muchos
+
+    public void addProject(Projects project){
+        this.projects.add(project);
+        project.getPersons().add(this);
+    }
+
+    //metodo para insertar una skill en la relacion muchos a muchos.
+
+    public void addSkill(Skills skill){
+        this.skills.add(skill);
+        skill.getPersons().add(this);
+    }
 
     public Person() {
     }
 
-    public Person(long id, String cvFileUrl) {
-        this.id = id;
-        CvFileUrl = cvFileUrl;
-    }
-
-    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl) {
-        this.id = id;
+    public Person(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, Admissions admission) {
         this.name = name;
         this.lastname = lastname;
         this.motherslastname = motherslastname;
@@ -83,149 +110,10 @@ public class Person {
         this.scholl = scholl;
         this.postulation = postulation;
         CvFileUrl = cvFileUrl;
-    }
-
-    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        CvFileUrl = cvFileUrl;
-        ProfileImageUrl = profileImageUrl;
-    }
-
-    public Person(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, Admissions admission) {
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
         this.admission = admission;
     }
 
-    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, User user, Status status, Admissions admission) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        this.user = user;
-        this.status = status;
-        this.admission = admission;
-    }
 
-    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, User user, Status status) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        this.user = user;
-        this.status = status;
-    }
-
-    public Person(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, User user, Status status) {
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        this.user = user;
-        this.status = status;
-    }
-
-    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, List<Skills> personSkills, List<Projects> projects) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        CvFileUrl = cvFileUrl;
-        ProfileImageUrl = profileImageUrl;
-        this.user = user;
-        this.status = status;
-        this.admission = admission;
-        this.personSkills = personSkills;
-        this.projects = projects;
-    }
-
-    public Person(String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl, String postulation, String cvFileUrl, String profileImageUrl, User user, Status status, Admissions admission, List<Skills> personSkills, List<Projects> projects) {
-        this.name = name;
-        this.lastname = lastname;
-        this.motherslastname = motherslastname;
-        this.dni = dni;
-        this.email = email;
-        this.emailInstitutional = emailInstitutional;
-        this.cellphone = cellphone;
-        this.phone = phone;
-        this.address = address;
-        this.scholl = scholl;
-        this.postulation = postulation;
-        CvFileUrl = cvFileUrl;
-        ProfileImageUrl = profileImageUrl;
-        this.user = user;
-        this.status = status;
-        this.admission = admission;
-        this.personSkills = personSkills;
-        this.projects = projects;
-    }
-
-    public String getEmailInstitutional() {
-        return emailInstitutional;
-    }
-
-    public void setEmailInstitutional(String emailInstitutional) {
-        this.emailInstitutional = emailInstitutional;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 
     public long getId() {
         return id;
@@ -275,6 +163,14 @@ public class Person {
         this.email = email;
     }
 
+    public String getEmailInstitutional() {
+        return emailInstitutional;
+    }
+
+    public void setEmailInstitutional(String emailInstitutional) {
+        this.emailInstitutional = emailInstitutional;
+    }
+
     public String getCellphone() {
         return cellphone;
     }
@@ -315,8 +211,28 @@ public class Person {
         this.postulation = postulation;
     }
 
+    public String getCvFileUrl() {
+        return CvFileUrl;
+    }
+
+    public void setCvFileUrl(String cvFileUrl) {
+        CvFileUrl = cvFileUrl;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Status getStatus() {
         return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Admissions getAdmission() {
@@ -327,39 +243,21 @@ public class Person {
         this.admission = admission;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public Set<Skills> getSkills() {
+        return skills;
     }
 
-    public String getCvFileUrl() {
-        return CvFileUrl;
+    public void setSkills(Set<Skills> skills) {
+        this.skills = skills;
     }
 
-    public void setCvFileUrl(String cvFileUrl) {
-        CvFileUrl = cvFileUrl;
-    }
-
-    public String getProfileImageUrl() {
-        return ProfileImageUrl;
-    }
-
-    public void setProfileImageUrl(String profileImageUrl) {
-        ProfileImageUrl = profileImageUrl;
-    }
-
-    public List<Skills> getPersonSkills() {
-        return personSkills;
-    }
-
-    public void setPersonSkills(List<Skills> personSkills) {
-        this.personSkills = personSkills;
-    }
-
-    public List<Projects> getProjects() {
+    public Set<Projects> getProjects() {
         return projects;
     }
 
-    public void setProjects(List<Projects> projects) {
+    public void setProjects(Set<Projects> projects) {
         this.projects = projects;
     }
 }
+
+

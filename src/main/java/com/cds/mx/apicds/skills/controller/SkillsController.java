@@ -14,7 +14,6 @@ public class SkillsController {
     @Autowired
     SkillsService skillsService;
 
-
     @GetMapping("/")
     public ResponseEntity<Message> getAll(){
         return skillsService.findAll();
@@ -24,15 +23,13 @@ public class SkillsController {
     public ResponseEntity<Message>getById(@PathVariable("description") String description){
         return skillsService.findByDescription(description);
     }
-
-    //Aqui se agrega una persona a la lista de personas que dominan esa skill
-
-    @PutMapping("/")
-    public ResponseEntity<Message>updateAdmision(@RequestBody SkillsDTO skillsDTO, Person person){
-        skillsDTO.addPerson(person);
-        Skills skills = new Skills(skillsDTO.getId(),skillsDTO.getPersonSkills());
-        return skillsService.update(skills);
+    @PostMapping("/")
+    public ResponseEntity<Message>createSkill(@RequestBody SkillsDTO skillsDTO ){
+        Skills skill = new Skills(skillsDTO.getDescription());
+        return skillsService.save(skill);
     }
+
+    //Aqui se agrega una persona a la lista de personas que dominan esa skil
 
 
 }

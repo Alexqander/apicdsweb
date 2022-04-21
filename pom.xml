@@ -33,6 +33,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
@@ -80,6 +85,7 @@
 			<groupId>io.awspring.cloud</groupId>
 			<artifactId>spring-cloud-starter-aws-messaging</artifactId>
 		</dependency>
+
 
 	</dependencies>
 

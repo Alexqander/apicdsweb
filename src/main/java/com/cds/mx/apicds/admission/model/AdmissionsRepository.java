@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface AdmissionsRepository extends JpaRepository<Admissions,Long> {
 
     Optional<Admissions>findByDescription(String description);
-    Optional<Admissions>findById(long id);
+    Admissions findById(long id);
 
 
 

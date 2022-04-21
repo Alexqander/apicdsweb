@@ -2,37 +2,30 @@ package com.cds.mx.apicds.skills.controller;
 
 import com.cds.mx.apicds.person.model.Person;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 public class SkillsDTO {
 
+
     private long id;
     private String description;
-    private List<Person> personSkills;
 
-    public SkillsDTO(long id, String description, List<Person> personSkills) {
-        this.id = id;
-        this.description = description;
-        this.personSkills = personSkills;
-    }
-
-    public void addPerson(Person person){
-        this.personSkills.add(person);
-    }
-
-
+    private List<Person>persons;
 
     public SkillsDTO(String description) {
         this.description = description;
     }
 
-    public SkillsDTO(String description, List<Person> personSkills) {
+    public SkillsDTO(long id, String description, List<Person> persons) {
+        this.id = id;
         this.description = description;
-        this.personSkills = personSkills;
+        this.persons = persons;
+    }
+
+    public SkillsDTO(long id, String description) {
+        this.id = id;
+        this.description = description;
     }
 
     public long getId() {
@@ -51,11 +44,11 @@ public class SkillsDTO {
         this.description = description;
     }
 
-    public List<Person> getPersonSkills() {
-        return personSkills;
+    public List<Person> getPersons() {
+        return persons;
     }
 
-    public void setPersonSkills(List<Person> personSkills) {
-        this.personSkills = personSkills;
+    public void setPersons(List<Person> persons) {
+        this.persons = persons;
     }
 }

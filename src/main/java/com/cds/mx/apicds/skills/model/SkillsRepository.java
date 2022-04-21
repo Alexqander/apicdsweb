@@ -10,7 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface SkillsRepository extends JpaRepository<Skills,Long> {
-    Optional<Skills> findByDescription(String description);
+    Skills findByDescription(String description);
+    Skills findById(long id);
+
     boolean existsById(long id);
    // List<Skills>findAllByPersonId(long id);
 

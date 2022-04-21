@@ -2,7 +2,6 @@ package com.cds.mx.apicds.admission.model;
 
 import com.cds.mx.apicds.person.model.Person;
 import com.cds.mx.apicds.status.model.Status;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,7 +19,6 @@ public class Admissions {
     private String endDate;
 
     @OneToMany(mappedBy = "admission")
-    @JsonIgnore
     private List<Person>persons;
 
     @ManyToOne

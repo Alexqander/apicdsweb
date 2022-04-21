@@ -1,16 +1,17 @@
 package com.cds.mx.apicds.projects.model;
 import com.cds.mx.apicds.person.model.Person;
 import com.cds.mx.apicds.status.model.Status;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Projects {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "projects_id")
+    @Column(name = "id_project")
     private long id;
     @Column
     private String name;
@@ -20,12 +21,14 @@ public class Projects {
     private int progress;
 
 
-    @ManyToMany
-    @JsonBackReference
-    @JoinTable(name = "persons_projects",
-    joinColumns = @JoinColumn(name = "projects_id",referencedColumnName = "projects_id"),
-    inverseJoinColumns = @JoinColumn(name = "person_id",referencedColumnName = "person_id"))
-    private List<Person>personsProjects;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "projects")
+    @JsonIgnore
+    private Set<Person> persons = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -55,20 +58,12 @@ public class Projects {
         this.status = status;
     }
 
-    public Projects(long id, String name, String description, int progress, List<Person> personsProjects, Status status) {
+    public Projects(long id, String name, String description, int progress, Set<Person> persons, Status status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.progress = progress;
-        this.personsProjects = personsProjects;
-        this.status = status;
-    }
-
-    public Projects(String name, String description, int progress, List<Person> personsProjects, Status status) {
-        this.name = name;
-        this.description = description;
-        this.progress = progress;
-        this.personsProjects = personsProjects;
+        this.persons = persons;
         this.status = status;
     }
 
@@ -105,12 +100,12 @@ public class Projects {
         this.progress = progress;
     }
 
-    public List<Person> getPersonsProjects() {
-        return personsProjects;
+    public Set<Person> getPersons() {
+        return persons;
     }
 
-    public void setPersonsProjects(List<Person> personsProjects) {
-        this.personsProjects = personsProjects;
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
     }
 
     public Status getStatus() {

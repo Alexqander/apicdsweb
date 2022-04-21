@@ -33,8 +33,8 @@ public class SkillsService {
     @Transactional(rollbackOn = {SQLException.class})
     public ResponseEntity<Message>save(Skills skills){
 
-        Optional<Skills> existsSkill = skillsRepository.findByDescription(skills.getDescription());
-        if (existsSkill.isPresent()){
+        Skills existsSkill = skillsRepository.findByDescription(skills.getDescription());
+        if (existsSkill!=null){
             return new ResponseEntity<>(new Message("Esta habilidad ya esta registrada",true,null),
                     HttpStatus.BAD_REQUEST);
         }

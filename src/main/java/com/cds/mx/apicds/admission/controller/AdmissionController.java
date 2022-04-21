@@ -21,6 +21,11 @@ public class AdmissionController {
     public ResponseEntity<Message>getById(@PathVariable("id") long id){
         return admissionService.findById(id);
     }
+
+    @GetMapping("/{id}/persons")
+    public ResponseEntity<Message>getPersons(@PathVariable("id") long id){
+        return admissionService.getPersons(id);
+    }
     @PostMapping("/")
     public ResponseEntity<Message>createAdmission(@RequestBody AdmissionDTO admissionDTO ){
         Admissions admissions = new Admissions(admissionDTO.getDescription(), admissionDTO.getStartDate(), admissionDTO.getEndDate(),admissionDTO.getStatus());

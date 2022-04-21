@@ -1,9 +1,12 @@
 package com.cds.mx.apicds.utils;
 
+import java.util.List;
+
 public class Message {
     private String message;
     private boolean error;
     private Object data;
+    private List<Object>listData;
 
 
     public Message() {
@@ -13,6 +16,20 @@ public class Message {
         this.message = message;
         this.error = error;
         this.data = data;
+    }
+
+    public Message(String message, boolean error, List<Object> listData) {
+        this.message = message;
+        this.error = error;
+        this.listData = listData;
+    }
+
+    public List<Object> getListData() {
+        return listData;
+    }
+
+    public void setListData(List<Object> listData) {
+        this.listData = listData;
     }
 
     public String getMessage() {

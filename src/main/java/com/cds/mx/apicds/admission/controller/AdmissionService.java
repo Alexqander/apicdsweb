@@ -3,6 +3,7 @@ package com.cds.mx.apicds.admission.controller;
 import com.cds.mx.apicds.admission.model.Admissions;
 import com.cds.mx.apicds.admission.model.AdmissionsRepository;
 import com.cds.mx.apicds.person.model.Person;
+import com.cds.mx.apicds.person.model.PersonRepository;
 import com.cds.mx.apicds.utils.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,12 +13,15 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 @Service
 @Transactional
 public class AdmissionService {
     @Autowired
     AdmissionsRepository admissionsRepository;
+    @Autowired
+    PersonRepository personRepository;
 
     //servicio para obtener a todas la convocatorias
     @Transactional
@@ -28,6 +32,22 @@ public class AdmissionService {
     public ResponseEntity<Message>findById(long id){
         return new ResponseEntity<>(new Message("OK",false,admissionsRepository.findById(id)),HttpStatus.OK);
     }
+
+    @Transactional
+    public ResponseEntity<Message>getPersons(long id){
+
+        Admissions admission = admissionsRepository.findById(id);
+        if (admission!=null){
+            List<Person> allpersons = personRepository.findAllByAdmission_Id(id);
+            return new ResponseEntity<>(new Message("ok",false, allpersons),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Message("OK",true,null),HttpStatus.OK);
+
+
+    }
+
+
+
     @Transactional(rollbackOn = {SQLException.class})
     public ResponseEntity<Message>save(Admissions admissions){
 

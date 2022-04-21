@@ -1,49 +1,56 @@
 package com.cds.mx.apicds.skills.model;
 
 import com.cds.mx.apicds.person.model.Person;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Skills {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "skills_id")
+    @Column(name = "id_skill")
     private long id;
     @Column
     private String description;
 
-    @ManyToMany
-    @JsonBackReference
-    @JoinTable(name = "person_skills",
-    joinColumns = @JoinColumn(name = "skills_id",referencedColumnName = "skills_id"),
-    inverseJoinColumns = @JoinColumn(name = "person_id",referencedColumnName = "person_id"))
-    private List<Person>personSkills;
 
-    public void addPerson(Person person){
-        this.personSkills.add(person);
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "skills")
+    @JsonIgnore
+    private Set<Person> persons = new HashSet<>();
+
+    //persons
+
+    public Skills(String description) {
+        this.description = description;
+    }
+
+    public Skills(long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
+    public Skills(long id, String description, Set<Person> persons) {
+        this.id = id;
+        this.description = description;
+        this.persons = persons;
+    }
+
+    public Skills(String description, Set<Person> persons) {
+        this.description = description;
+        this.persons = persons;
     }
 
     public Skills() {
-    }
 
-
-    public Skills(long id, List<Person> personSkills) {
-        this.id = id;
-        this.personSkills = personSkills;
-    }
-
-    public Skills(long id, String description, List<Person> personSkills) {
-        this.id = id;
-        this.description = description;
-        this.personSkills = personSkills;
-    }
-
-    public Skills(String description, List<Person> personSkills) {
-        this.description = description;
-        this.personSkills = personSkills;
     }
 
     public long getId() {
@@ -62,11 +69,12 @@ public class Skills {
         this.description = description;
     }
 
-    public List<Person> getPersonSkills() {
-        return personSkills;
+    public Set<Person> getPersons() {
+        return persons;
     }
 
-    public void setPersonSkills(List<Person> personSkills) {
-        this.personSkills = personSkills;
+    public void setPersons(Set<Person> persons) {
+        this.persons = persons;
     }
 }
+

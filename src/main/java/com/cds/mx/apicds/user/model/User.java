@@ -26,6 +26,17 @@ public class User {
     public User() {
     }
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, Person person) {
+        this.username = username;
+        this.password = password;
+        this.person = person;
+    }
+
     public User(String username, String password, Person person, Set<Role> authorities) {
         this.username = username;
         this.password = password;
