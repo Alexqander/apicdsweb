@@ -30,14 +30,12 @@ public class PersonController {
                 personDTO.getAdmission());
         return personService.save(person);
     }
-    @PutMapping("/{id}/mod")
-    public ResponseEntity<Message> modificar(@PathVariable(value = "id")long id,@RequestBody PersonDTO personDTO) {
-        Person person = new Person(personDTO.getName(),personDTO.getLastname(),personDTO.getMotherslastname()
+    @PutMapping("/update")
+    public ResponseEntity<Message> modificar(@RequestBody PersonDTO personDTO) {
+        Person person = new Person(personDTO.getId(),personDTO.getName(),personDTO.getLastname(),personDTO.getMotherslastname()
                 ,personDTO.getDni(),personDTO.getEmail(),personDTO.getEmailInstitutional(),personDTO.getCellphone()
-                ,personDTO.getPhone(),personDTO.getAddress(),personDTO.getScholl(),personDTO.getPostulation(),
-                personDTO.getCvFileUrl(),
-                personDTO.getAdmission());
-        return personService.modificar(id,person);
+                ,personDTO.getPhone(),personDTO.getAddress(),personDTO.getScholl());
+        return personService.updatePerson(person);
     }
     @PutMapping("/{id}/projects/{pro}")
     public ResponseEntity<Message> addProject(@PathVariable(value = "id")long id,@PathVariable(value = "pro")long pro) {

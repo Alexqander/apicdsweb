@@ -35,19 +35,24 @@ public class UserService {
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Message>save(User user){
-
-        System.out.println("dni de la persona : " + user.getPerson().getDni());
+        Status status = statusRepository.findStatusById(1);
+        System.out.println("aqui llega el usuario " + user.getUsername() + " " + user.getPerson());
         if (userRepository.existsByUsername(user.getUsername()))
             return new ResponseEntity<>(new Message("el Usuario ya existe",true,null), HttpStatus.BAD_REQUEST);
-        if (userRepository.existsByPersonDni(user.getPerson().getDni()))
-            return new ResponseEntity<>(new Message("La persona ya existe",true,null), HttpStatus.BAD_REQUEST);
 
-        Address address = addressRepository.saveAndFlush(user.getPerson().getAddress());
-
+        if (user.getPerson().getAddress()!=null){
+            Address address = addressRepository.saveAndFlush(user.getPerson().getAddress());
+            Person person =user.getPerson();
+            person.setAddress(address);
+            person.setStatus(status);
+            person = personRepository.saveAndFlush(person);
+            user.setPerson(person);
+        }
         Person person =user.getPerson();
-                person.setAddress(address);
-                person = personRepository.saveAndFlush(person);
+        person = personRepository.saveAndFlush(person);
+        person.setStatus(status);
         user.setPerson(person);
+
         return new ResponseEntity<>(new Message("OK",false,userRepository.saveAndFlush(user)), HttpStatus.OK);
     }
     @Transactional(readOnly = true)

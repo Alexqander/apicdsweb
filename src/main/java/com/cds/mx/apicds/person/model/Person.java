@@ -113,7 +113,19 @@ public class Person {
         this.admission = admission;
     }
 
-
+    public Person(long id, String name, String lastname, String motherslastname, String dni, String email, String emailInstitutional, String cellphone, String phone, Address address, String scholl) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.motherslastname = motherslastname;
+        this.dni = dni;
+        this.email = email;
+        this.emailInstitutional = emailInstitutional;
+        this.cellphone = cellphone;
+        this.phone = phone;
+        this.address = address;
+        this.scholl = scholl;
+    }
 
     public long getId() {
         return id;

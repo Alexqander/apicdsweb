@@ -38,13 +38,38 @@ public class PersonService {
     }
 
     @Transactional
-    public ResponseEntity<Message> modificar(long id,Person person){
-
-        Person existPerson =personRepository.findPersonById(id);
+    public ResponseEntity<Message> updatePerson(Person person){
+        Person existPerson =personRepository.findPersonById(person.getId());
         if(existPerson!=null){
-            existPerson.setCellphone(person.getCellphone());
-            existPerson.setEmail(person.getEmail());
-            return new ResponseEntity<>(new Message("OK",false,personRepository.saveAndFlush(existPerson)), HttpStatus.OK);
+            if (!person.getName().isEmpty())
+                existPerson.setName(person.getName());
+            if (!person.getLastname().isEmpty())
+                existPerson.setLastname(person.getLastname());
+            if (!person.getMotherslastname().isEmpty())
+                existPerson.setMotherslastname(person.getMotherslastname());
+            if (!person.getEmail().isEmpty())
+                existPerson.setEmail(person.getEmail());
+            if (!person.getDni().isEmpty())
+                existPerson.setDni(person.getDni());
+            if (!person.getCellphone().isEmpty())
+                existPerson.setCellphone(person.getCellphone());
+            if (!person.getPhone().isEmpty())
+                existPerson.setPhone(person.getPhone());
+            if (!person.getEmailInstitutional().isEmpty())
+                existPerson.setEmailInstitutional(person.getEmailInstitutional());
+            if (!person.getAddress().getStreet().isEmpty())
+                existPerson.getAddress().setStreet(person.getAddress().getStreet());
+            if (!person.getAddress().getColonia().isEmpty())
+                existPerson.getAddress().setColonia(person.getAddress().getColonia());
+            if (!person.getAddress().getEstate().isEmpty())
+                existPerson.getAddress().setEstate(person.getAddress().getEstate());
+            if (!person.getAddress().getTown().isEmpty())
+                existPerson.getAddress().setTown(person.getAddress().getTown());
+            person.getAddress().setId(existPerson.getAddress().getId());
+            Address addresUpdate = addressRepository.save(existPerson.getAddress());
+            existPerson.setAddress(addresUpdate);
+
+            return new ResponseEntity<>(new Message("OK",false,personRepository.save(existPerson)), HttpStatus.OK);
         }
         return new ResponseEntity<>(new Message("error",true,null),
                 HttpStatus.BAD_REQUEST);
